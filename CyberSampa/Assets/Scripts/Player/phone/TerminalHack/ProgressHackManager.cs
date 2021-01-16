@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ProgressHackManager : MonoBehaviour
-{
-	public GameObject menuPhone;
+{ 
 	public Text nameText;
 	public Text dialogueText;
 

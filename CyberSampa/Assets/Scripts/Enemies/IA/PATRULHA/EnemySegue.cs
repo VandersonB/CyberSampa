@@ -4,18 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 public class EnemySegue : EnemyBase
 {
-    private bool idle;
+    
     protected override void Awake()
     {
         base.Awake();
     }
-    private void Start()
-    {
-        menuOBJ.SetActive(false);
-    }
 
     protected override void Update()
     {
+     
         //RAYcast_active(chão,parede(collider))
         if (!RaycastGround().collider || RaycastWall().collider)
         {
@@ -32,8 +29,8 @@ public class EnemySegue : EnemyBase
             //3- INIMIGO ATIVA A ANIMAÇÃO SUBIMISSÃO NO PLAYER
             if (RaycastToPlayer().distance <= 0.6f) {
                 //4- PLAYER CAPITURADO , APAREÇE TELA DE CONTINUAR A JOGAR
-                Time.timeScale = 0; //Pause_Tela
-                menuOBJ.SetActive(true);
+    
+                //menuOBJ.SetActive(true);
                 //5- PLAYER RETORNA AO INICIO
             }
         }
@@ -48,17 +45,18 @@ public class EnemySegue : EnemyBase
     }
     private void LateUpdate()
     {
+        /*
         if (direction == 0)
         {
             animator.SetBool("idle", idle);
         }
-        else if(direction == 1)
+        else*/ if(direction == 1)
         {
             animator.SetFloat("Horizontal", 1);
         }
         else if(direction == -1)
         {
-            animator.SetFloat("Horizontal", 2);
+            animator.SetFloat("Horizontal", -1);
         }
     }
     private void Movement()
@@ -66,6 +64,6 @@ public class EnemySegue : EnemyBase
         float horizontalVelocity = speed;
         horizontalVelocity = horizontalVelocity * direction;
         rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
-        idle = false;
+        //idle = false;
     }
 }

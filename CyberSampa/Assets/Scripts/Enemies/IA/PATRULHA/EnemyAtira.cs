@@ -1,125 +1,123 @@
 ﻿using System.Collections;
 using UnityEngine;
-
-namespace Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA
+using Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA;
+public class EnemyAtira : EnemyBase
 {
-    public class EnemyAtira : MonoBehaviour
+
+    [Header("TIRO")]
+    public GameObject bulletPrefab;
+    public int weaponSpeed;
+    public float lenghtBullet;          //olhosInimigo
+
+    // RAYCAST VAR        
+    public Transform rayPointBullet;     //visualiza bala_tiro
+    public RaycastHit2D hitToBullet;       //bala_Tiro Collider
+                                           //private bool idle;
+    protected override void Awake()
     {
-        
-        [Header("MENU_")]
-        public GameObject menuOBJ;
-        [Header("Enemy Propriedades")]
-        public float speed;
-        //[HideInInspector]
-        public int direction;
+        base.Awake();
 
-        [Header("TIRO")]
-        public GameObject bulletPrefab;
-        public int weaponSpeed;
-        [Header("RayCast Propriedades")]
-        public LayerMask layerGround;          // LAYER QUE RECONHEÇE O chão
-        public LayerMask layerPlayer;          // LAYER QUE RECONHEÇE O PLAYER
-        public float lenghtGround;             // tamanhoChão
-        public float lenghtWall;               //parede
-        public float lenghtBullet;          //olhosInimigo
-
-        // RAYCAST VAR        
-        public Transform rayPointGround;       //visualiza chão
-        public RaycastHit2D hitGround;         //chão Collider
-
-        public Transform rayPointWall;         //visualiza parede
-        public RaycastHit2D hitWall;           //parede Collider
-
-        public Transform rayPointBullet;     //visualiza bala_tiro
-        public RaycastHit2D hitToBullet;       //bala_Tiro Collider
-
-
-        protected Animator animator;
-        protected Rigidbody2D rb;
-
-        public void Start()
-        {
-            menuOBJ.SetActive(false);
-         
-        }
-        protected virtual void Awake()
-        {
-            animator = GetComponent<Animator>();
-            rb = GetComponent<Rigidbody2D>();
-            direction = (int)transform.localScale.x;
-
-        }
-        protected virtual void Update()
-        {
-
-        }
-
-        protected virtual void Flip()
-        {
-            direction = (int)(-Mathf.Sign(rb.velocity.x));
-            transform.localScale = new Vector2(6, transform.localScale.y);
-        }
-        /// <RAyCAST>
-        ///     [BASE EM TODOS OS INIMIGOS]
-        ///     -> RaycastGround() = CHÃO
-        ///     -> RaycastWall()   = PAREDE
-        ///     
-        ///     [ADD NO INIMIGO NORMAL Q APENAS SEGUE]
-        ///     -> RaycastToPlayer() = QUANDO VER O JOGADOR O SIGA
-        ///     
-        ///     [ADD NO INIMIGO COM ARMA QUE ATIRA]
-        ///     -> RaycastBulletToPlayer() = QUANDO VER O JOGADOR ATIRE
-        /// 
-        /// </RAyCAST>
-
-        #region RAYCAST_
-        protected virtual RaycastHit2D RaycastGround()
-        {
-            //send out desired raycast and record the result
-            hitGround = Physics2D.Raycast(rayPointGround.position, Vector2.down, lenghtGround, layerGround);
-
-            //.... DETERMINE THE COLOR BASED ON IF THE RAYCAST HIT..
-            Color color = hitGround ? Color.red : Color.green;
-
-            //.....and draw the reg in the scene view
-            Debug.DrawRay(rayPointGround.position, Vector2.down * lenghtGround, color);
-
-            //return the results of the raycast
-            return hitGround;
-        }
-
-        protected virtual RaycastHit2D RaycastWall()
-        {
-
-            //envio result raycast
-            hitWall = Physics2D.Raycast(rayPointWall.position, Vector2.right * direction, lenghtWall, layerGround);
-
-            //cor baseado no meu raycast
-            Color color = hitWall ? Color.yellow : Color.blue;
-
-            //DESENHANDO COM A COR
-            Debug.DrawRay(rayPointWall.position, Vector2.right * direction * lenghtWall, color);
-
-            //return resultado do meu raycast
-            return hitWall;
-        }
-
-        protected virtual RaycastHit2D RaycastTiro() //EmDesenvolvimento
-        {     
-            GameObject goWeapon = (GameObject)Instantiate(bulletPrefab, rayPointBullet.position, Quaternion.identity);
-          
-            //send out desired raycast and record the result
-            hitToBullet = Physics2D.Raycast(rayPointBullet.position, Vector2.right * direction, lenghtBullet, layerPlayer);
-            goWeapon.GetComponent<Rigidbody2D>().AddForce(Vector3.right * weaponSpeed);
-            //.... DETERMINE THE COLOR BASED ON IF THE RAYCAST HIT..
-            Color color = hitToBullet ? Color.red : Color.green;
-
-            //.....and draw the reg in the scene view
-            Debug.DrawRay(rayPointBullet.position, Vector2.right * lenghtBullet, color);
-
-            //return the results of the raycast
-            return hitToBullet;
-        }
-        #endregion
     }
+
+    protected override void Update()
+    {
+        //RAYcast_active(chão,parede(collider))
+        if (!RaycastGround().collider || RaycastWall().collider)
+        {
+            Flip();
+        }
+        if (RaycastToPlayer().collider && RaycastToPlayer().distance <= 3.5f)
+        {
+            speed = 0;
+            RaycastTiro();
+            /* não terminado
+            if (RaycastTiro().collider.tag == "Player") {
+                StartCoroutine(TempMenuOpen());
+            
+            }*/
+        }
+        else
+            speed = 2;
+    }
+    private void FixedUpdate()
+    {
+        Movement();
+    }
+    private void LateUpdate()
+    {
+        /*
+            if (direction == 0)
+            {
+                animator.SetBool("idle", idle);
+            }
+            else*/
+        if (direction == 1)
+        {
+            animator.SetFloat("Horizontal", 1);
+        }
+        else if (direction == -1)
+        {
+            animator.SetFloat("Horizontal", -1);
+        }
+    }
+    private void Movement()
+    {
+        float horizontalVelocity = speed;
+        horizontalVelocity = horizontalVelocity * direction;
+        rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
+        //idle = false;
+    }
+
+    /// <RAyCAST>
+    ///     [BASE EM TODOS OS INIMIGOS]
+    ///     -> RaycastGround() = CHÃO
+    ///     -> RaycastWall()   = PAREDE
+    ///     
+    ///     [ADD NO INIMIGO NORMAL Q APENAS SEGUE]
+    ///     -> RaycastToPlayer() = QUANDO VER O JOGADOR O SIGA
+    ///     
+    ///     [ADD NO INIMIGO COM ARMA QUE ATIRA]
+    ///     -> RaycastBulletToPlayer() = QUANDO VER O JOGADOR ATIRE
+    /// 
+    /// </RAyCAST>
+
+    #region RAYCAST_
+
+
+    protected virtual RaycastHit2D RaycastTiro() //EmDesenvolvimento
+    {
+        //Instantiate(duplicando minha bala no ponto rayPointBullet
+
+        if (speed == 0)
+        {
+            GameObject goWeapon = (GameObject)Instantiate(bulletPrefab, rayPointBullet.position, Quaternion.identity);
+            //Add força de tiro
+            goWeapon.GetComponent<Rigidbody2D>().AddForce(Vector3.right * direction * weaponSpeed);
+            if (hitToBullet.collider)
+            {
+                Destroy(goWeapon);
+            }
+            //___set direction_correspondente áo lado o inimigo
+            if (direction == -1)
+            {
+                goWeapon.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+                goWeapon.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        //send out desired raycast and record the result
+        hitToBullet = Physics2D.Raycast(rayPointBullet.position, Vector2.right * direction, lenghtBullet, layerPlayer);
+
+  
+        //.... DETERMINE THE COLOR BASED ON IF THE RAYCAST HIT..
+        Color color = hitToBullet ? Color.red : Color.green;
+
+        //.....and draw the reg in the scene view
+        Debug.DrawRay(rayPointBullet.position, Vector2.right * lenghtBullet, color);
+
+        //return the results of the raycast
+        return hitToBullet;
+    }
+    #endregion
 }

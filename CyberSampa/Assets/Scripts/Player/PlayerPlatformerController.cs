@@ -25,6 +25,16 @@ public class PlayerPlatformerController : PhysicsObject
 
         move.x = Input.GetAxis("Horizontal");
 
+        //CORRENDO____________________________________________
+        if (maxSpeed == 7 && Input.GetKey(KeyCode.LeftShift))
+        {
+            maxSpeed = 14;
+        }
+        else
+        {
+            maxSpeed = 7;
+        }
+        //Pulando____________________________________________
         if (Input.GetButtonDown("Jump") && grounded)
         {
             velocity.y = jumpTakeOffSpeed;
@@ -36,7 +46,7 @@ public class PlayerPlatformerController : PhysicsObject
                 velocity.y = velocity.y * 0.5f;
             }
         }
-
+        //
         bool flipSprite = (spriteRenderer.flipX ? (move.x > 0.01f) : (move.x < 0.01f));
         if (flipSprite)
         {

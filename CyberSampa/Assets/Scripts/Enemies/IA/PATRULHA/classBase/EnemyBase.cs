@@ -52,7 +52,6 @@ namespace Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA
         protected virtual void Flip()
         {
             direction = (int)(-Mathf.Sign(rb.velocity.x));
-            transform.localScale = new Vector2(6, transform.localScale.y);
         }
         /// <RAyCAST>
         ///     [BASE EM TODOS OS INIMIGOS]

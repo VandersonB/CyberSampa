@@ -47,6 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
+    <UnityProjectGeneratorVersion>4.8.2.0</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2019.4.17f1</UnityVersion>
@@ -65,11 +66,16 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\EnemyAtira.cs" />
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\EnemySegue.cs" />
+    <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\balaArma\BulletTempDestroy.cs" />
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\classBase\EnemyBase.cs" />
+    <Compile Include="Assets\Scripts\MapaAction\FinishTrigger.cs" />
+    <Compile Include="Assets\Scripts\MapaAction\HackTrigger.cs" />
+    <Compile Include="Assets\Scripts\MapaAction\TELEPORT\TeleportTrigger.cs" />
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPC.cs" />
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPCManager.cs" />
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPCTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\CELULAR\android\MINI-GAME-1\IAEnemyPro01.cs" />
+    <Compile Include="Assets\Scripts\Player\Menu\MenuEnemyAll.cs" />
     <Compile Include="Assets\Scripts\Player\PhysicsObject.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPlatformerController.cs" />
     <Compile Include="Assets\Scripts\Player\notebook\HackingServ.cs" />
@@ -261,10 +267,10 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.17f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="Pathfinding.Ionic.Zip.Reduced">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Assets/Pacote/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Assets/Pacote/AstarPathfindingProject/Plugins/DotNetZip/Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.17f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -612,91 +618,91 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.17f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Cinemachine">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Path.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Triangle.Runtime">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="PsdPlugin">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/PsdPlugin.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Projetos/CyberSampa/CyberSampa/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>C:/Users/Duzinho/Documents/PROJECT_UNITY/CyberSampa/CyberSampa/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
