@@ -19,29 +19,22 @@ public class AcoesJogador : MonoBehaviour
     private AudioClip audioPulo;
     [SerializeField]
     private AudioClip audioMorte;
-
     [SerializeField]
     private KeyCode pulo;
-
-    
     [SerializeField]
     private UnityEvent aoPressionarPulo;
     
     [SerializeField]
-    private float RaioPulo = 0.1f;//define o raio de ação do CheckGound do Player para o pulo
-    
+    private float RaioPulo = 0.3f;//define o raio de ação do CheckGound do Player para o pulo
     [SerializeField]
     private float ajusteDeColisorAgaixado;
-    
-
     [SerializeField] // para aparecer no inspector do player
-    private float velocidade = 4; // defini a velocidade do player
-    [Range(10, 22)]
-    public float forcapulo = 9.7f;  // defini a força do pulo do player
-    private float horizontal;  //variavel para controlar player 1 Eixo X.
-    private float velocidadeQueda;
+    private float velocidade = 8; // defini a velocidade do player
+    [Range(10, 40)]
+    public float forcapulo = 28f;  // defini a força do pulo do player
+    private float horizontal;  //variavel para controlar player 1 Eixo X
 
-    private bool grounded; //variavel de controle do pulo (condição para pular)
+    public bool grounded; //variavel de controle do pulo (condição para pular)
 
     private Vector3 ladoDireito;
     private Vector3 ladoEsquerdo;
@@ -69,30 +62,43 @@ public class AcoesJogador : MonoBehaviour
     private void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, RaioPulo, 1 << LayerMask.NameToLayer("Ground"));
+
         if (Input.GetKeyDown(pulo) && grounded)
         {
+            Debug.Log("PULOU!");
             aoPressionarPulo.Invoke();
         }
-        if (Input.GetKey(KeyCode.D)&&grounded)
+        if (Input.GetKey(KeyCode.D))
         {
+            Debug.Log("ANDOU PRA DIREITA!");
             transform.position += new Vector3 (Input.GetAxis("Horizontal")*velocidade*Time.deltaTime, 0f, 0f);
             horizontal = 0.5f;
-            animator.SetBool("correndo", true);
+            if (grounded)
+            {
+                animator.SetBool("correndo", true);
+            }
         }
-        if(Input.GetKey(KeyCode.A)&&grounded)
-        { 
+        if(Input.GetKey(KeyCode.A))
+        {
+            Debug.Log("ANDOU PRA ESQUERDA!");
             transform.position += new Vector3 (Input.GetAxis("Horizontal")*velocidade*Time.deltaTime, 0f, 0f);
             horizontal = -0.5f;
-            animator.SetBool("correndo", true);
+            if (grounded)
+            {
+                animator.SetBool("correndo", true);
+            }
+            
         }
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)){
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            Debug.Log("PAROU!");
             horizontal = 0;
             animator.SetBool("correndo", false);
         }
         horizontal = Input.GetAxis("Horizontal");
         MudarDirecao(horizontal);                   //função de direção que recebe o valor do eixo X (-1~1)
-        Animacao(horizontal);
-        velocidadeQueda = Math.Abs(rb2D.velocity.y); //caso o jogador caia muito rápido ele morrerá, de acordo com o OnCollisionEnter no fim desse código.
+        AnimacaoCorrer(horizontal);
+        AnimacaoPulo(grounded);
     }
     private void MudarDirecao(float horizontal) //VIRADA DE SPRITE DO PLAYER
     {
@@ -105,7 +111,7 @@ public class AcoesJogador : MonoBehaviour
             transform.localScale = ladoEsquerdo;
         }
     }
-    private void Animacao(float horizontal)
+    private void AnimacaoCorrer(float horizontal)
     {
         animator.SetFloat("velocidade", Mathf.Abs(horizontal));               //Se tiver velocidade abs > 0 anima corrida
     }
@@ -120,25 +126,25 @@ public class AcoesJogador : MonoBehaviour
     {
         if (!jump)
         {
-            animator.SetBool("pulando", true);           
+            animator.SetBool("pulando", true);
         }            //Se não estiver no chão anima o pulo
         if (jump)
         {
             animator.SetBool("pulando", false);
         }          // --- situação oposta ...,
     }
-    public void Abaixar()
-    {   
-    }
+    
     void OnDrawGizmos()//desenha a esfera de detecção do chão para o pulo, apenas para visualização
     {                                               
         Gizmos.DrawWireSphere(groundCheck.position, RaioPulo);
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
+    private void OnCollisionEnter2D(Collision2D collision2D)
+    {           //Detecta se colidiu
+        Debug.Log("COLIDIU com " + collision2D.gameObject.tag);
     }
-    private void ChamaMorte()
-    {
+    private void OnCollisionExit2D(Collision2D collision2D)
+    {           // Detecta se parou de colidir
+        Debug.Log("PAROU DE COLIDIR com " + collision2D.gameObject.tag);
     }
 }
