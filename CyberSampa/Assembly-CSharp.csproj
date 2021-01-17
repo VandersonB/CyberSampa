@@ -72,9 +72,11 @@
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPC.cs" />
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPCManager.cs" />
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPCTrigger.cs" />
+    <Compile Include="Assets\Scripts\Player\AcoesJogador.cs" />
     <Compile Include="Assets\Scripts\Player\CELULAR\android\MINI-GAME-1\IAEnemyPro01.cs" />
     <Compile Include="Assets\Scripts\Player\Menu\MenuEnemyAll.cs" />
     <Compile Include="Assets\Scripts\Player\PhysicsObject.cs" />
+    <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPlatformerController.cs" />
     <Compile Include="Assets\Scripts\Player\notebook\HackingServ.cs" />
     <Compile Include="Assets\Scripts\Player\phone\PhoneInput.cs" />
