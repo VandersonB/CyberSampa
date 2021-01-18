@@ -29,12 +29,17 @@ public class AcoesJogador : MonoBehaviour
     [SerializeField]
     private float ajusteDeColisorAgaixado;
     [SerializeField] // para aparecer no inspector do player
-    private float velocidade = 8; // defini a velocidade do player
+    private float velocidade; // defini a velocidade do player
     [Range(10, 40)]
-    public float forcapulo = 28f;  // defini a força do pulo do player
+    public float forcapulo;  // defini a força do pulo do player
     private float horizontal;  //variavel para controlar player 1 Eixo X
 
     public bool grounded; //variavel de controle do pulo (condição para pular)
+    public bool podeDash;
+    public bool dashando;
+    private float tempoDash;
+    public float duracaoDash;
+    public float velocidadeDash;
 
     private Vector3 ladoDireito;
     private Vector3 ladoEsquerdo;
@@ -51,6 +56,12 @@ public class AcoesJogador : MonoBehaviour
 
     private void Start()
     {
+        podeDash = true;
+        forcapulo = 28f;
+        velocidade = 8;
+        duracaoDash = 0.5f;
+        tempoDash = duracaoDash;
+        velocidadeDash = 2 * velocidade;
         ladoDireito = transform.localScale;
         ladoEsquerdo = transform.localScale;
         ladoEsquerdo.x = ladoEsquerdo.x * -1;
@@ -61,33 +72,43 @@ public class AcoesJogador : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, RaioPulo, 1 << LayerMask.NameToLayer("Ground"));
+        horizontal = Input.GetAxis("Horizontal");
+        Chao();
+        Correr();
+        Pulo();
+        Dash();
+        MudarDirecao(horizontal);                   //função de direção que recebe o valor do eixo X (-1~1)
+        AnimacaoCorrer(horizontal);
+        AnimacaoPulo(grounded);
+        AnimacaoDash(dashando);
+    }
 
-        if (Input.GetKeyDown(pulo) && grounded)
-        {
-            Debug.Log("PULOU!");
-            aoPressionarPulo.Invoke();
-        }
+    private void Chao()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, RaioPulo, 1 << LayerMask.NameToLayer("Ground"));
+    }
+    private void Correr()
+    {
+        
         if (Input.GetKey(KeyCode.D))
         {
             Debug.Log("ANDOU PRA DIREITA!");
-            transform.position += new Vector3 (Input.GetAxis("Horizontal")*velocidade*Time.deltaTime, 0f, 0f);
+            transform.position += new Vector3(Input.GetAxis("Horizontal") * velocidade * Time.deltaTime, 0f, 0f);
             horizontal = 0.5f;
             if (grounded)
             {
                 animator.SetBool("correndo", true);
             }
         }
-        if(Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             Debug.Log("ANDOU PRA ESQUERDA!");
-            transform.position += new Vector3 (Input.GetAxis("Horizontal")*velocidade*Time.deltaTime, 0f, 0f);
+            transform.position += new Vector3(Input.GetAxis("Horizontal") * velocidade * Time.deltaTime, 0f, 0f);
             horizontal = -0.5f;
             if (grounded)
             {
                 animator.SetBool("correndo", true);
             }
-            
         }
         if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
@@ -95,10 +116,55 @@ public class AcoesJogador : MonoBehaviour
             horizontal = 0;
             animator.SetBool("correndo", false);
         }
-        horizontal = Input.GetAxis("Horizontal");
-        MudarDirecao(horizontal);                   //função de direção que recebe o valor do eixo X (-1~1)
-        AnimacaoCorrer(horizontal);
-        AnimacaoPulo(grounded);
+    }
+    private void Pulo()//PULO DO PLAYER bool j
+    {
+        if (Input.GetKeyDown(KeyCode.W) && grounded)
+        {
+            Debug.Log("PULOU!");
+            rb2D.AddForce(transform.up * forcapulo, ForceMode2D.Impulse);
+        }
+        
+    }
+    private void Dash()
+    {
+        if(Input.GetKeyDown(KeyCode.S) && grounded && podeDash)
+        {
+            if(tempoDash <= 0)
+            {
+                rb2D.velocity = Vector2.zero;
+                tempoDash = duracaoDash;
+                podeDash = false;
+                dashando = false;
+            }
+            else
+            {
+                dashando = true;
+                tempoDash = -Time.deltaTime;
+                if (horizontal > 0)
+                {
+                    rb2D.velocity = Vector2.right * velocidadeDash;
+                }
+                if (horizontal < 0)
+                {
+                    rb2D.velocity = Vector2.left * velocidadeDash;
+                }
+            }
+            if (horizontal > 0)
+            {
+                rb2D.velocity = Vector2.right * velocidadeDash;
+            }
+            if(horizontal < 0)
+            {
+                rb2D.velocity = Vector2.left * velocidadeDash;
+            }
+        }
+        if(Input.GetKeyUp(KeyCode.S))
+        {
+            podeDash = true;
+            dashando = false;
+            tempoDash = duracaoDash;
+        }
     }
     private void MudarDirecao(float horizontal) //VIRADA DE SPRITE DO PLAYER
     {
@@ -115,14 +181,7 @@ public class AcoesJogador : MonoBehaviour
     {
         animator.SetFloat("velocidade", Mathf.Abs(horizontal));               //Se tiver velocidade abs > 0 anima corrida
     }
-    public void Morrer(bool morrer)
-    {       
-    }
-    public void Pulo()//PULO DO PLAYER bool j
-    {
-        rb2D.AddForce(transform.up * forcapulo, ForceMode2D.Impulse);
-    }
-    public void AnimacaoPulo(bool jump) //CONTROLE DAS ANIMAÇÕES DO PLAYER
+    private void AnimacaoPulo(bool jump) //CONTROLE DAS ANIMAÇÕES DO PLAYER
     {
         if (!jump)
         {
@@ -133,18 +192,32 @@ public class AcoesJogador : MonoBehaviour
             animator.SetBool("pulando", false);
         }          // --- situação oposta ...,
     }
-    
+    private void AnimacaoDash(bool dash)
+    {
+        if(dash)
+        {
+            animator.SetBool("dashando", true);
+        }
+        if (!dash)
+        {
+            animator.SetBool("dashando", false);
+        }
+
+
+    }
+
+
+
     void OnDrawGizmos()//desenha a esfera de detecção do chão para o pulo, apenas para visualização
     {                                               
         Gizmos.DrawWireSphere(groundCheck.position, RaioPulo);
     }
-
     private void OnCollisionEnter2D(Collision2D collision2D)
     {           //Detecta se colidiu
-        Debug.Log("COLIDIU com " + collision2D.gameObject.tag);
+        //Debug.Log("COLIDIU com " + collision2D.gameObject.tag);
     }
     private void OnCollisionExit2D(Collision2D collision2D)
     {           // Detecta se parou de colidir
-        Debug.Log("PAROU DE COLIDIR com " + collision2D.gameObject.tag);
+        //Debug.Log("PAROU DE COLIDIR com " + collision2D.gameObject.tag);
     }
 }
