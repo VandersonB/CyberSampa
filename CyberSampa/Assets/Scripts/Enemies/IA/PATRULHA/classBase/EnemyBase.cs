@@ -5,6 +5,9 @@ namespace Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA
 {
     public class EnemyBase : MonoBehaviour
     {
+        [Header("JUMP_FORCE")]
+        public int jumpForce;
+        bool jumping;
         [Header("MENU_")]
         public GameObject menuOBJ;
         [Header("Enemy Propriedades")]
@@ -31,7 +34,7 @@ namespace Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA
 
 
         protected Animator animator;
-        protected Rigidbody2D rb;
+        protected Rigidbody2D rbd2;
 
         public void Start()
         {
@@ -40,18 +43,40 @@ namespace Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA
         protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
-            rb = GetComponent<Rigidbody2D>();
+            rbd2 = GetComponent<Rigidbody2D>();
             direction = (int)transform.localScale.x;
 
         }
         protected virtual void Update()
         {
-
+           rayPointWall.LookAt(Player.instance.gameObject.transform);
+        }
+        protected virtual void FixedUpdate()
+        {
+            Pulo(jumping);
         }
 
         protected virtual void Flip()
         {
-            direction = (int)(-Mathf.Sign(rb.velocity.x));
+            direction = (int)(-Mathf.Sign(rbd2.velocity.x));
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("TriggerJumpEnemy"))
+            {
+                Pulo(true);
+            }
+        }
+
+        public void Pulo(bool j)
+        {                                      //PULO DO PLAYER
+            if (j)
+            {
+                rbd2.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+              
+                jumping = false;
+            }
         }
         /// <RAyCAST>
         ///     [BASE EM TODOS OS INIMIGOS]

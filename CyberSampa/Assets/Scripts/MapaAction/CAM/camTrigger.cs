@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class camTrigger : MonoBehaviour
+public class CamTrigger : MonoBehaviour
 {
+    public static CamTrigger instance;
     public AudioSource alarmeAudio;
 
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         alarmeAudio = GetComponent<AudioSource>();
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Update()
     {
-        if(collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Player_Esta-Na_visão_da_camera!");
-            alarmeAudio.Play();
-        }
+        
     }
 }
