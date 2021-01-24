@@ -22,10 +22,11 @@ public class Player : MonoBehaviour
     public Transform GroundCheck; //definida pela posição do GameObject "GroundCheck" do Player,
     public Transform AxeAttack;   //definida pela posição do GameObject "AxeAttack" do Player
     public float RaioPulo;        //define o raio de ação do CheckGound do Player para o pulo
-    
+    public static Player instance;
     private void Awake() {
         rb2D = GetComponent<Rigidbody2D>();         //Coleta os componentes do player
-        animator = GetComponent<Animator>();        // --    
+        animator = GetComponent<Animator>();        // --
+        instance = this;
     }
     void Start() {
         eLadoDireito = transform.localScale.x > 0; // --
@@ -79,6 +80,7 @@ public class Player : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision2D) {           // Detecta se parou de colidir
         Debug.Log("PAROU DE COLIDIR com " + collision2D.gameObject.tag);    
     }
+  
     void OnDrawGizmos() {                                               //desenha a esfera de detecção do chão para o pulo, apenas para visualização
         Gizmos.DrawWireSphere(GroundCheck.position, RaioPulo);  
     }

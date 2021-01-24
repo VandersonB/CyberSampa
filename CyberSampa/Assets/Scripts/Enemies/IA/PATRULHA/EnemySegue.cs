@@ -1,60 +1,49 @@
-﻿using Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
+using Assets._CORE_.IA_INIMIGO.Script.IA.PATRULHA;
 public class EnemySegue : EnemyBase
 {
-    
+    public static EnemySegue instance;
+    private bool jumping;   //acessa o pulo do jogador
+    public float RaioPulo;        //define o raio de ação do CheckGound do Player para o pulo
+
+    [SerializeField]
+    private float forcapulo = 1;  // defini a força do pulo do player
+
     protected override void Awake()
     {
         base.Awake();
+        instance = this;
     }
 
     protected override void Update()
     {
-     
         //RAYcast_active(chão,parede(collider))
-        if (!RaycastGround().collider || RaycastWall().collider)
-        {
+
+        if (!RaycastGround().collider && !RaycastWall().collider)
+        { 
             Flip();
         }
-        //Raycast_active(INIMIGO_SEGUE__1-PLAYER CHEGA PERTO EM UMA DETERMINADA)    
-        if (RaycastToPlayer().collider && RaycastToPlayer().distance <= 3)
-        {
-            //INCOMPLETO , AQUIE É O  OBJETIVO DO INIMIGO Q SEGUE
-
-            //2-INIMIGO CORRE(OK)
-            speed = 4;      // VELOCIDADE INIMIGO AUMENTADA
-
-            //3- INIMIGO ATIVA A ANIMAÇÃO SUBIMISSÃO NO PLAYER
-            if (RaycastToPlayer().distance <= 0.6f) {
-                //4- PLAYER CAPITURADO , APAREÇE TELA DE CONTINUAR A JOGAR
-    
-                //menuOBJ.SetActive(true);
-                //5- PLAYER RETORNA AO INICIO
-            }
-        }
-        else
-        {
-            speed = 2;
-        }
+      
     }
     private void FixedUpdate()
     {
         Movement();
+        Pulo(jumping);
     }
     private void LateUpdate()
     {
         /*
-        if (direction == 0)
-        {
-            animator.SetBool("idle", idle);
-        }
-        else*/ if(direction == 1)
+            if (direction == 0)
+            {
+                animator.SetBool("idle", idle);
+            }
+            else*/
+        if (direction == 1)
         {
             animator.SetFloat("Horizontal", 1);
         }
-        else if(direction == -1)
+        else if (direction == -1)
         {
             animator.SetFloat("Horizontal", -1);
         }
@@ -63,7 +52,44 @@ public class EnemySegue : EnemyBase
     {
         float horizontalVelocity = speed;
         horizontalVelocity = horizontalVelocity * direction;
-        rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
+        rbd2.velocity = new Vector2(horizontalVelocity, rbd2.velocity.y);
         //idle = false;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "actionPulo")
+        {
+            rbd2.AddForce(Vector2.up * 600f); 
+        }
+    }
+
+    /// <RAyCAST>
+    ///     [BASE EM TODOS OS INIMIGOS]
+    ///     -> RaycastGround() = CHÃO
+    ///     -> RaycastWall()   = PAREDE
+    ///     
+    ///     [ADD NO INIMIGO NORMAL Q APENAS SEGUE]
+    ///     -> RaycastToPlayer() = QUANDO VER O JOGADOR O SIGA
+    ///     
+    ///     [ADD NO INIMIGO COM ARMA QUE ATIRA]
+    ///     -> RaycastBulletToPlayer() = QUANDO VER O JOGADOR ATIRE
+    /// 
+    /// </RAyCAST>
+    private void Pulo(bool j)
+    {                                      //PULO DO PLAYER
+        if (j)
+        {
+            rbd2.AddForce(transform.up * forcapulo, ForceMode2D.Impulse);
+
+            jumping = false;
+        }
+    }
+
+    #region RAYCAST_
+
+
+
+
+    #endregion
 }

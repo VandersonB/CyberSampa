@@ -64,7 +64,7 @@ public class EnemyAtira : EnemyBase
     {
         float horizontalVelocity = speed;
         horizontalVelocity = horizontalVelocity * direction;
-        rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
+        rbd2.velocity = new Vector2(horizontalVelocity, rbd2.velocity.y);
         //idle = false;
     }
 
