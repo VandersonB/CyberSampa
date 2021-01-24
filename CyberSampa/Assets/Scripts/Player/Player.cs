@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
     private float forcapulo = 1;  // defini a força do pulo do player
     [SerializeField]
     private bool grounded; //variavel de controle do pulo (condição para pular)
-
     
     private bool jumping;   //acessa o pulo do jogador
     private Rigidbody2D rb2D; //criação de variável de manipulação do rigidbody do player
@@ -34,7 +33,7 @@ public class Player : MonoBehaviour
     void Update(){
         //grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
         grounded = Physics2D.OverlapCircle(GroundCheck.position, RaioPulo, 1 << LayerMask.NameToLayer("Ground"));
-        if(Input.GetKeyDown(KeyCode.Space) && grounded) 
+        if(Input.GetKeyDown(KeyCode.W) && grounded) 
         {
             jumping = true;
         }
