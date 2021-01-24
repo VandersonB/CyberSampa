@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\EnemySegue.cs" />
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\balaArma\BulletTempDestroy.cs" />
     <Compile Include="Assets\Scripts\Enemies\IA\PATRULHA\classBase\EnemyBase.cs" />
-    <Compile Include="Assets\Scripts\MapaAction\CAM\camTrigger.cs" />
     <Compile Include="Assets\Scripts\MapaAction\FinishTrigger.cs" />
     <Compile Include="Assets\Scripts\MapaAction\HackTrigger.cs" />
     <Compile Include="Assets\Scripts\MapaAction\TELEPORT\TeleportTrigger.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Assets\Scripts\NPC\Dialogo\DialogoNPCTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\AcoesJogador.cs" />
     <Compile Include="Assets\Scripts\Player\CELULAR\android\MINI-GAME-1\IAEnemyPro01.cs" />
-    <Compile Include="Assets\Scripts\Player\CELULAR\android\SystemOperacional.cs" />
     <Compile Include="Assets\Scripts\Player\Menu\MenuEnemyAll.cs" />
     <Compile Include="Assets\Scripts\Player\PhysicsObject.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
