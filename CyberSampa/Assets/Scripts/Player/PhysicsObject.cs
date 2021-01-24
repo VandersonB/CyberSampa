@@ -1,26 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PhysicsObject : MonoBehaviour
 {
-    
-    [SerializeField]
-    private const float tempoMaxDash = 1.0f; // define o tempo máximo de Dash
-    [SerializeField]
-    private float distanciaDash = 10;//determina a distância maxima de Dash
-    [SerializeField]
-    private float velocidadeAcrescimoVelocidade = 0.1f;//determimna o acrescimo de Dash
 
-    public float tempoAtualDash = tempoMaxDash;
-    public float minGroundNormalY = .65f; //Controla a altura mínima para considerar o player no "chão"
-    public float gravityModifier = 1f; //modificador de gravidade, impactando no andar e no pulo;
+    public float minGroundNormalY = .65f;
+    public float gravityModifier = 1f;
 
-    private Vector2 moveDash;
-
-    protected Vector2 targetVelocity; //vetor de velocidade
-    protected bool grounded; //verifica se o player está no chão.
+    protected Vector2 targetVelocity;
+    protected bool grounded;
     protected Vector2 groundNormal;
     protected Rigidbody2D rb2d;
     protected Vector2 velocity;
@@ -32,11 +21,9 @@ public class PhysicsObject : MonoBehaviour
     protected const float minMoveDistance = 0.001f;
     protected const float shellRadius = 0.01f;
 
-
-
     void OnEnable()
     {
-        rb2d = GetComponent<Rigidbody2D>(); //ativa o RigidBody quando o GO está ativo.
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     void Start()
@@ -49,54 +36,54 @@ public class PhysicsObject : MonoBehaviour
     void Update()
     {
         targetVelocity = Vector2.zero;
-        ComputeInputs();
+        ComputeVelocity();
     }
 
-    protected virtual void ComputeInputs() //sem função nesse código. No outro scrip, é ele que fica lendo os inputs.
+    protected virtual void ComputeVelocity()
     {
 
     }
 
     void FixedUpdate()
     {
-       
-        velocity += gravityModifier * Physics2D.gravity * Time.deltaTime; //vetor de velocidade, considerando a gravidade e o modificador.
-        velocity.x = targetVelocity.x; 
-        grounded = false; //a variável é verificada todo frame. Por conta disso, ela é reiniciada antes de ser executada nos métodos;
+        velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
+        velocity.x = targetVelocity.x;
 
-        Vector2 deltaPosition = velocity * Time.deltaTime; //recebe o vetor posição baseado na velocidade calculada no inicio do Fixed Update
+        grounded = false;
+
+        Vector2 deltaPosition = velocity * Time.deltaTime;
+
         Vector2 moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
 
-        Dash(moveAlongGround); //executa o método Dash, independente do botão ser pressionado
+        Vector2 move = moveAlongGround * deltaPosition.x;
 
-        Vector2 move = moveDash * deltaPosition.x; //calcula o vetor x, contanto ou não com o Dash;
-        Movement(move, false); //executa o movimento em X
-        move = Vector2.up * deltaPosition.y; //calcula o vetor de movimento em Y, de acordo com input do jogador;
-        Movement(move, true);//executa o movimento em Y
-        
-        
+        Movement(move, false);
+
+        move = Vector2.up * deltaPosition.y;
+
+        Movement(move, true);
     }
 
-    void Movement(Vector2 move, bool yMovement) //método que executa recebe os inputs e executa o movimento.
+    void Movement(Vector2 move, bool yMovement)
     {
         float distance = move.magnitude;
 
         if (distance > minMoveDistance)
         {
-            int count = rb2d.Cast(move, contactFilter, hitBuffer, distance + shellRadius); //retorna o inteiro correspondente aos colliders da cena em compara~ção ao RigidBody do GO
+            int count = rb2d.Cast(move, contactFilter, hitBuffer, distance + shellRadius);
             hitBufferList.Clear();
-            for (int i = 0; i < count; i++)//cria uma lista a partir dessa contagem.
+            for (int i = 0; i < count; i++)
             {
                 hitBufferList.Add(hitBuffer[i]);
             }
 
-            for (int i = 0; i < hitBufferList.Count; i++) 
+            for (int i = 0; i < hitBufferList.Count; i++)
             {
                 Vector2 currentNormal = hitBufferList[i].normal;
-                if (currentNormal.y > minGroundNormalY) 
+                if (currentNormal.y > minGroundNormalY)
                 {
                     grounded = true;
-                    if (yMovement) //se o movimento for de pulo.
+                    if (yMovement)
                     {
                         groundNormal = currentNormal;
                         currentNormal.x = 0;
@@ -116,22 +103,7 @@ public class PhysicsObject : MonoBehaviour
 
         }
 
-        rb2d.position = rb2d.position + move.normalized * distance; //executa o movimento do player
+        rb2d.position = rb2d.position + move.normalized * distance;
     }
 
-    Vector2 Dash(Vector2 move) //precisa adequar a animação;
-    {
-      
-        if (tempoAtualDash < tempoMaxDash)
-        {
-            moveDash += move* distanciaDash;
-            tempoAtualDash += velocidadeAcrescimoVelocidade;
-        }
-
-        else
-        {
-            moveDash = move;
-        }
-        return moveDash;
-    }
 }
